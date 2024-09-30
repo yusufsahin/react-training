@@ -1,0 +1,28 @@
+{
+  "users": [
+    {
+      "id": "1",
+      "name": "John Doe",
+      "email": "john@example.com"
+    },
+    {
+      "id": "2",
+      "name": "Jane Doe",
+      "email": "jane@example.com"
+    }
+  ],
+  "posts": [
+    {
+      "id": "1",
+      "title": "Sample Post Update",
+      "body": "Update This is a sample post.",
+      "userId": "2"
+    },
+    {
+      "id": "2",
+      "title": "Another Post",
+      "body": "Another sample post.",
+      "userId": 2
+    }
+  ]
+}
