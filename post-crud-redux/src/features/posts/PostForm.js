@@ -5,18 +5,21 @@ import * as yup from 'yup';
 import { Form, Button } from 'react-bootstrap';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import { useSelector } from 'react-redux';
 
 // Define the schema using Yup for form validation
 const schema = yup.object().shape({
   title: yup.string().required('Title is required'),
   body: yup.string().required('Body is required'),
   postDate: yup.date().required('Date is required').typeError('Invalid date'),
+  userId: yup.string().required('User is required'),  // Add validation for user selection
 });
 
 const PostForm = ({ onSubmit, initialValues }) => {
-  // Initialize the form with react-hook-form
+  const { users } = useSelector((state) => state.users);  // Get users from Redux store
+
   const { handleSubmit, control, formState: { errors } } = useForm({
-    defaultValues: initialValues || { title: '', body: '', postDate: new Date() },
+    defaultValues: initialValues || { title: '', body: '', postDate: new Date(), userId: '' },
     resolver: yupResolver(schema),
   });
 
@@ -79,6 +82,31 @@ const PostForm = ({ onSubmit, initialValues }) => {
         </Form.Control.Feedback>
       </Form.Group>
 
+      <Form.Group controlId="userId">
+        <Form.Label>User</Form.Label>
+        <Controller
+          name="userId"
+          control={control}
+          render={({ field }) => (
+            <Form.Control
+              as="select"
+              isInvalid={!!errors.userId}
+              {...field}
+            >
+              <option value="">Select a user</option>
+              {users.map((user) => (
+                <option key={user.id} value={user.id}>
+                  {user.name}
+                </option>
+              ))}
+            </Form.Control>
+          )}
+        />
+        <Form.Control.Feedback type="invalid">
+          {errors.userId?.message}
+        </Form.Control.Feedback>
+      </Form.Group>
+
       <Button variant="primary" type="submit">
         {initialValues?.id ? 'Update Post' : 'Create Post'}
       </Button>
@@ -87,3 +115,4 @@ const PostForm = ({ onSubmit, initialValues }) => {
 };
 
 export default PostForm;
+
